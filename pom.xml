@@ -1,0 +1,138 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.webcontext.apps.gk2</groupId>
+	<artifactId>restservice</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>GK2 RestService</name>
+	<description>The backend service for the Game Komunity Katalog web application.</description>
+	<url>http://www.web-context.com/</url>
+	<inceptionYear>2014</inceptionYear>
+	<organization>
+		<name>WebContext</name>
+		<url>http://www.web-context.com/</url>
+	</organization>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<version>3.0.10.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.weld.servlet</groupId>
+			<artifactId>weld-servlet</artifactId>
+			<version>2.1.0.Final</version>
+		</dependency>
+
+		<!-- Unit Testing -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- End-2-End test -->
+		<dependency>
+			<groupId>com.jayway.restassured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>2.4.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- MongoDB -->
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>2.12.4</version>
+		</dependency>
+
+		<!-- Logger -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+
+
+	</dependencies>
+
+	<build>
+		<finalName>restservice</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<!-- plugin> <groupId>org.eclipse.jetty</groupId> <artifactId>jetty-maven-plugin</artifactId> 
+				<version>9.1.5.v20140505</version> <configuration> <scanIntervalSeconds>10</scanIntervalSeconds> 
+				<stopKey>foo</stopKey> <stopPort>9999</stopPort> <webAppSourceDirectory></webAppSourceDirectory> 
+				<webApp> <contextPath>/</contextPath> <descriptor>${project.basedir}/src/main/webapp/WEB-INF/web.xml</descriptor> 
+				<jettyEnvXml>${project.basedir}/src/main/webapp/WEB-INF/jetty-env.xml</jettyEnvXml> 
+				</webApp> <scanTargets> <scanTarget>${project.basedir}/src/main/webapp</scanTarget> 
+				</scanTargets> <scanTargetPatterns> <scanTargetPattern> <directory>src/main</directory> 
+				<includes> <include>**/*.xml</include> <include>**/*.properties</include> 
+				</includes> </scanTargetPattern> </scanTargetPatterns> </configuration> <executions> 
+				<execution> <id>start-jetty</id> <phase>pre-integration-test</phase> <goals> 
+				<goal>run</goal> </goals> <configuration> <scanIntervalSeconds>0</scanIntervalSeconds> 
+				<daemon>true</daemon> </configuration> </execution> <execution> <id>stop-jetty</id> 
+				<phase>post-integration-test</phase> <goals> <goal>stop</goal> </goals> </execution> 
+				</executions> </plugin -->
+
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>8.1.3.v20120416</version>
+				<configuration>
+					<webApp>
+						<overrideDescriptor>src/main/webapp/WEB-INF/web-add.xml</overrideDescriptor>
+					</webApp>
+					<contextXml>src/main/webapp/WEB-INF/jetty-context.xml</contextXml>
+				</configuration>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+				<executions>
+					<execution>
+						<id>surefire-it</id>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<skip>false</skip>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>utf-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
