@@ -1,11 +1,9 @@
 package com.webcontext.apps.gk2.restservice.persistence;
 
-import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mongodb.BasicDBObject;
@@ -15,7 +13,6 @@ import com.mongodb.DBObject;
 import com.mongodb.WriteResult;
 import com.mongodb.util.JSON;
 import com.webcontext.apps.gk2.restservice.persistence.exception.NullMongoDBConnection;
-import com.webcontext.apps.gk2.restservice.utils.FileIO;
 
 /**
  * This class is a lightweight implementation for a Data Repository accessing to
@@ -28,7 +25,8 @@ import com.webcontext.apps.gk2.restservice.utils.FileIO;
 public abstract class MongoDbRepository<T> implements IMongoDbRepository<T> {
 
 	private MongoDbConnection connection;
-
+	protected Class<T> entityClass;
+	 
 	/**
 	 * Date formatter to be used to convert date in serialize/deserialize
 	 * operations.
@@ -46,6 +44,17 @@ public abstract class MongoDbRepository<T> implements IMongoDbRepository<T> {
 	 */
 	public MongoDbRepository() {
 		super();
+        ParameterizedType genericSuperClass = (ParameterizedType) getClass()
+                .getGenericSuperclass();
+        @SuppressWarnings("unchecked")
+        Class<T> class1 = (Class<T>) genericSuperClass
+                .getActualTypeArguments()[0];
+        this.entityClass = class1;
+
+		
+		if(this.connection==null){
+			this.connection = new MongoDbConnection();
+		}
 	}
 
 	/**
@@ -57,6 +66,7 @@ public abstract class MongoDbRepository<T> implements IMongoDbRepository<T> {
 	public MongoDbRepository(String collectionName) {
 		this();
 		this.collectionName = collectionName;
+		
 	}
 
 	/**
@@ -251,23 +261,5 @@ public abstract class MongoDbRepository<T> implements IMongoDbRepository<T> {
 		this.connection = conn;
 	}
 
-	/**
-	 * Read the T object list from a JSON file.
-	 * 
-	 * @param filePath
-	 *            the JSON file to be read and parsed to produce a
-	 *            <code>List<T></code> objects.
-	 * @return return a list of T object as a <code>list<T></code>.
-	 * @throws IOException
-	 */
-	@SuppressWarnings("serial")
-	public List<T> loadObjectFromJSONFile(String filePath) throws IOException {
-		String json = FileIO.fastRead(filePath);
-		TypeToken<List<T>> token = new TypeToken<List<T>>() {
-		};
-		List<T> list = gson.fromJson(json, token.getType());
-
-		return list;
-	}
 
 }

@@ -3,19 +3,25 @@
  */
 package com.webcontext.apps.gk2.restservice.services;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.Logger;
 
-import com.webcontext.apps.gk2.restservice.manager.GameRepository;
 import com.webcontext.apps.gk2.restservice.model.Game;
 import com.webcontext.apps.gk2.restservice.persistence.exception.NullMongoDBConnection;
+import com.webcontext.apps.gk2.restservice.repository.GameRepository;
 
 /**
+ * Serve Game information on some REST web service.
+ * 
  * @author Frederic Delorme<frederic.delorme@web-context.com
  *
  */
@@ -30,25 +36,37 @@ public class GameRestService {
 	@GET
 	@Path("/find/{title}")
 	@Produces("application/json")
-	public Game findByTitle(@PathParam("title") String title) {
+	public void findByTitle(@PathParam("title") String title) {
 		logger.debug("Retrieve a game on its title " + title + ".");
-		Game game = games.findByTitle(title);
-		return game;
+		List<Game> gameList;
+		try {
+			gameList = games.findByTitle(title);
+			if (games != null) {
+				Response.ok(gameList.get(0));
+			} else {
+				Response.status(Status.NOT_FOUND);
+			}
+		} catch (NullMongoDBConnection e) {
+			Response.status(Status.BAD_REQUEST);
+		}
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces("application/json")
-	public Game findById(@PathParam("id") String id) {
+	public void findById(@PathParam("id") String id) {
 		logger.debug("Retrieve a game on its id=" + id + ".");
 		Game game = null;
 		try {
 			game = games.findById(id);
+			if (game != null) {
+				Response.ok(game);
+			} else {
+				Response.status(Status.NOT_FOUND);
+			}
 		} catch (NullMongoDBConnection e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Response.status(Status.BAD_REQUEST);
 		}
-		return game;
 	}
 
 }

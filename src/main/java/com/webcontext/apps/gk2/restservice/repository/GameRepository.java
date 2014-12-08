@@ -1,13 +1,18 @@
 /**
  * 
  */
-package com.webcontext.apps.gk2.restservice.manager;
+package com.webcontext.apps.gk2.restservice.repository;
 
+import java.io.IOException;
+import java.util.List;
+
+import com.google.gson.reflect.TypeToken;
 import com.mongodb.BasicDBObject;
 import com.mongodb.util.JSON;
 import com.webcontext.apps.gk2.restservice.model.Game;
 import com.webcontext.apps.gk2.restservice.persistence.MongoDbRepository;
 import com.webcontext.apps.gk2.restservice.persistence.exception.NullMongoDBConnection;
+import com.webcontext.apps.gk2.restservice.utils.FileIO;
 
 /**
  * a basic Web REST web service to serve Game entity.
@@ -31,7 +36,6 @@ public class GameRepository extends MongoDbRepository<Game> {
 	 * com.webcontext.apps.gk2.restservice.persistence.MongoDbRepository#deserialize
 	 * (com.mongodb.BasicDBObject)
 	 */
-	@Override
 	public Game deserialize(BasicDBObject item) {
 		Game game = new Game();
 		game = gson.fromJson(item.toString(), Game.class);
@@ -45,7 +49,6 @@ public class GameRepository extends MongoDbRepository<Game> {
 	 * com.webcontext.apps.gk2.restservice.persistence.MongoDbRepository#serialize
 	 * (java.lang.Object)
 	 */
-	@Override
 	public BasicDBObject serialize(Game item) {
 		BasicDBObject object = new BasicDBObject();
 
@@ -58,19 +61,33 @@ public class GameRepository extends MongoDbRepository<Game> {
 	 * 
 	 * @param title
 	 * @return
+	 * @throws NullMongoDBConnection
 	 */
-	public Game findByTitle(String title) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Game> findByTitle(String title) throws NullMongoDBConnection {
+
+		return this.find("{ \"title\" : \"" + title + "\" }");
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Read the T object list from a JSON file.
 	 * 
-	 * @see
-	 * com.webcontext.apps.gk2.restservice.persistence.IMongoDbRepository#findById
-	 * (java.lang.String)
+	 * @param filePath
+	 *            the JSON file to be read and parsed to produce a
+	 *            <code>List<T></code> objects.
+	 * @return return a list of T object as a <code>list<T></code>.
+	 * @throws IOException
 	 */
+	@SuppressWarnings("serial")
+	public List<Game> loadObjectFromJSONFile(String filePath)
+			throws IOException {
+		String json = FileIO.fastRead(filePath);
+		TypeToken<List<Game>> token = new TypeToken<List<Game>>() {
+		};
+		List<Game> list = gson.fromJson(json, token.getType());
+
+		return list;
+	}
+
 	@Override
 	public Game findById(String id) throws NullMongoDBConnection {
 		// TODO Auto-generated method stub
