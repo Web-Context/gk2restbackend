@@ -1,0 +1,45 @@
+<article class="game">
+<div class="header">
+	<div class="note">{{game.rate}}</div>
+
+	<img class="cover"
+	src="images/psp/{{game.platform}}-{{game.title}}-cover.jpg"
+	title="{{game.platform}}/{{game.title}}" />
+
+	<h1 class="title">({{game.platform}}) {{game.title}}</h1>
+
+	<p class="rates">
+		<em>gfx</em>
+		<code>[{{game.rates.gfx}}]</code>
+		<em>sound</em>
+		<code>[{{game.rates.sound}}]</code>
+		<em>replay</em>
+		<code>[{{game.rates.replay}}]</code>
+		<em>game</em>
+		<code>[{{game.rates.game}}]</code>
+	</p>
+
+	<div>{{game.header}}</div>
+
+	<p class="author"><strong>#{{game.id}}</strong> : {{game.date}} :
+		{{game.author}}</p>
+	</div>
+	<div class="body">{{game.content}}</div>
+	<hr />
+
+	<div class="swing">
+		<div class="pad plus">
+			<h2>+</h2>
+			<ul>
+				<li repeat="item in game.plus">{{item}}</li>
+			</ul>
+		</div>
+		<div class="pad minus">
+			<h2>-</h2>
+			<ul>
+				<li repeat="item in game.minus">{{item}}</li>
+			</ul>
+		</div>
+	</div>
+
+</article>

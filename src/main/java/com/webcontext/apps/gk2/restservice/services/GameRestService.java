@@ -69,4 +69,33 @@ public class GameRestService {
 		}
 	}
 
+	/**
+	 * Retrieve <code>pageSize</code> games from list starting at
+	 * <code>offset</code>.
+	 * 
+	 * @param offset
+	 *            first item for the game list.
+	 * @param pageSize
+	 *            number of items to retrieve.
+	 */
+	@GET
+	@Path("/{offset}-{pageSize}")
+	@Produces("application/json")
+	public void findAll(@PathParam("offset") int offset,
+			@PathParam("pageSize") int pageSize) {
+		logger.debug("Retrieve @pageSize=" + pageSize + " games from @offset="
+				+ offset);
+		List<Game> gameList;
+		try {
+			gameList = games.find("",offset, pageSize);
+			if (games != null) {
+				Response.ok(gameList);
+			} else {
+				Response.status(Status.NOT_FOUND);
+			}
+		} catch (NullMongoDBConnection e) {
+			Response.status(Status.BAD_REQUEST);
+		}
+	}
+
 }

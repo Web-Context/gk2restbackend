@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html ng-app="gk2frontend">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Games Katalog Kommunity</title>
+<link rel="stylesheet" href="css/games.css">
+<style>
+</style>
+</head>
+<body>
+	<div class="content">
+		<header>
+			<div class="userprofile">
+				<a href="/#login" accesskey="L"><u>L</u>ogin</a>
+			</div>
+			<a href="/#home"><h1>Games Katalog Kommunity</h1></a>
+			<ul ng-repeat="platform in platforms">
+				<li><a href="/#platform/{{platform.id}}">{{platform.title}}</a></li>
+			</ul>
+		</header>
+		<section id="page" ng-controller="MainCtrl">
+			<div ng-repeat="game in games">
+				<div ng-include="game.html"></div>
+				<div class="clear"></div>
+			</div>
+		</section>
+		<footer>
+			<p>
+				&copy; 2014 - <a href="http://www.web-contect.com"
+					title="Navigate to WebContext site">Navigate to WebContext site</a>
+				- <a href="mailto:contact@web-context.com?subject=feedback" "email
+					toWeb-Contextteam">contact</a>
+			</p>
+		</footer>
+
+	</div>
+	<script type="text/javascript" src="js/lib/angular.min.js"></script>
+	<script type="text/javascript" src="js/app/application.js"></script>
+	<script type="text/javascript" src="js/app/controllers/mainctrl.js"></script>
+</body>
+</html>
