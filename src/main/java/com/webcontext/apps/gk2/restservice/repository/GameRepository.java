@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
 import com.mongodb.util.JSON;
 import com.webcontext.apps.gk2.restservice.model.Game;
 import com.webcontext.apps.gk2.restservice.persistence.MongoDbRepository;
@@ -17,13 +18,13 @@ import com.webcontext.apps.gk2.restservice.utils.FileIO;
 /**
  * a basic Web REST web service to serve Game entity.
  * 
- * @author Frederic Delorme<frederic.delorme@web-context.com
+ * @author Frederic Delorme<frederic.delorme@web-context.com>
  *
  */
 public class GameRepository extends MongoDbRepository<Game> {
 
 	/**
-	 * Default constructor for default connection.
+	 * Default constructor for default connection to "games" collection.
 	 */
 	public GameRepository() {
 		super("games");
@@ -90,8 +91,12 @@ public class GameRepository extends MongoDbRepository<Game> {
 
 	@Override
 	public Game findById(String id) throws NullMongoDBConnection {
-		// TODO Auto-generated method stub
-		return null;
+		List<Game> list =  super.find("{ id:'"+id+"'}");
+		if(list!=null && list.size()>0){
+			return list.get(0);
+		}else{
+			return null;
+		}
 	}
 
 }

@@ -26,7 +26,7 @@ public abstract class MongoDbRepository<T> implements IMongoDbRepository<T> {
 
 	private MongoDbConnection connection;
 	protected Class<T> entityClass;
-	 
+
 	/**
 	 * Date formatter to be used to convert date in serialize/deserialize
 	 * operations.
@@ -44,15 +44,13 @@ public abstract class MongoDbRepository<T> implements IMongoDbRepository<T> {
 	 */
 	public MongoDbRepository() {
 		super();
-        ParameterizedType genericSuperClass = (ParameterizedType) getClass()
-                .getGenericSuperclass();
-        @SuppressWarnings("unchecked")
-        Class<T> class1 = (Class<T>) genericSuperClass
-                .getActualTypeArguments()[0];
-        this.entityClass = class1;
+		ParameterizedType genericSuperClass = (ParameterizedType) getClass()
+				.getGenericSuperclass();
+		@SuppressWarnings("unchecked")
+		Class<T> class1 = (Class<T>) genericSuperClass.getActualTypeArguments()[0];
+		this.entityClass = class1;
 
-		
-		if(this.connection==null){
+		if (this.connection == null) {
 			this.connection = new MongoDbConnection();
 		}
 	}
@@ -66,7 +64,7 @@ public abstract class MongoDbRepository<T> implements IMongoDbRepository<T> {
 	public MongoDbRepository(String collectionName) {
 		this();
 		this.collectionName = collectionName;
-		
+
 	}
 
 	/**
@@ -212,6 +210,16 @@ public abstract class MongoDbRepository<T> implements IMongoDbRepository<T> {
 	}
 
 	/**
+	 * Remove all entities contained in the collectionName.
+	 */
+	public void removeAll() {
+		DBCollection collection = connection.getDb().getCollection(
+				collectionName);
+		BasicDBObject searchFilter = (BasicDBObject) JSON.parse("{}");
+		collection.remove(searchFilter);
+	}
+
+	/**
 	 * convert a T item to a BasicDBObject
 	 * 
 	 * @param item
@@ -260,6 +268,5 @@ public abstract class MongoDbRepository<T> implements IMongoDbRepository<T> {
 	public void setConnection(MongoDbConnection conn) {
 		this.connection = conn;
 	}
-
 
 }

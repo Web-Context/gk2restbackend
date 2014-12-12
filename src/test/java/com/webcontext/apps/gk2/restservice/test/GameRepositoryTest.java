@@ -8,10 +8,18 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
 import com.webcontext.apps.gk2.restservice.model.Game;
@@ -21,12 +29,21 @@ import com.webcontext.apps.gk2.restservice.repository.GameRepository;
 /**
  * GameRepository Unit test
  * 
- * @author Frederic Delorme<frederic.delorme@web-context.com
+ * @author Frederic Delorme<frederic.delorme@web-context.com>
  *
  */
+@RunWith(Arquillian.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class GameRepositoryTest {
 
+	@Deployment
+	public static JavaArchive createArchive() {
+		return ShrinkWrap.create(JavaArchive.class, "foo.jar")
+				.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
+				.addPackage(GameRepository.class.getPackage());
+	}
+
+	@Inject
 	private GameRepository games;
 
 	private List<Game> listGames;
@@ -36,7 +53,6 @@ public class GameRepositoryTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		games = new GameRepository();
 		listGames = games.loadObjectFromJSONFile("dataset/games.json");
 	}
 
@@ -47,6 +63,7 @@ public class GameRepositoryTest {
 	 */
 	@Test
 	public void test_01_Save() {
+		games.removeAll();
 		int count = 0;
 		for (Game game : listGames) {
 			try {
@@ -86,15 +103,13 @@ public class GameRepositoryTest {
 	 * .
 	 */
 	@Test
-	@Ignore
 	public void test_03_FindById() {
 		try {
-			Game game = games.findById("00001");
+			Game game = games.findById("000001");
 			assertEquals(
-					"Unbale to find 'Watch Dogs' game with the id='00001'",
+					"Unbale to find 'Watch Dogs' game with the id='000001'",
 					"Watch Dogs", game.getTitle());
 		} catch (NullMongoDBConnection e) {
-
 			fail("Unable to retrieve the game with id '00001'");
 		}
 
@@ -106,9 +121,13 @@ public class GameRepositoryTest {
 	 * .
 	 */
 	@Test
-	@Ignore
 	public void test_04_Find() {
-		fail("Not yet implemented");
+		try {
+			List<Game> list = games.find();
+			assertEquals("Unbale to find any game", list.size() > 0, true);
+		} catch (NullMongoDBConnection e) {
+			fail("Unable to retrieve the game with id '00001'");
+		}
 	}
 
 	/**
@@ -117,20 +136,14 @@ public class GameRepositoryTest {
 	 * .
 	 */
 	@Test
-	@Ignore
 	public void test_05_Count() {
-		fail("Not yet implemented");
-	}
+		try {
+			long nb = games.count();
+			assertEquals("Number of games is not 2", nb, 2);
+		} catch (NullMongoDBConnection e) {
+			fail("Unable to count games.");
+		}
 
-	/**
-	 * Test method for
-	 * {@link com.webcontext.apps.gk2.restservice.persistence.MongoDbRepository#find(java.lang.String)}
-	 * .
-	 */
-	@Test
-	@Ignore
-	public void test_06_FindString() {
-		fail("Not yet implemented");
 	}
 
 	/**
@@ -139,9 +152,14 @@ public class GameRepositoryTest {
 	 * .
 	 */
 	@Test
-	@Ignore
 	public void test_07_FindStringIntInt() {
-		fail("Not yet implemented");
+		try {
+			List<Game> list = games
+					.find("{platform : { $all: ['X360']}}", 1, 1);
+			assertEquals("Unbale to find any game", list.size(), 1);
+		} catch (NullMongoDBConnection e) {
+			fail("Unable to retrieve the game with id '00001'");
+		}
 	}
 
 	/**
@@ -150,9 +168,16 @@ public class GameRepositoryTest {
 	 * .
 	 */
 	@Test
-	@Ignore
 	public void test_08_Remove() {
-		fail("Not yet implemented");
+		try {
+			for (Game item : listGames) {
+				games.remove(item);
+			}
+			assertEquals("List of collection 'games' was not purged",
+					games.count(), 0);
+		} catch (NullMongoDBConnection e) {
+			fail("Unable to purge collection");
+		}
 	}
 
 }
