@@ -27,6 +27,13 @@ this project rely on a 3 tiers architecture:
 
 The Documents used here are <code>Game</code> describing a video game.   
 
+## Unit Test
+
+todo
+
+## REST tests
+
+todo
 
 McG.
 Web-Context
