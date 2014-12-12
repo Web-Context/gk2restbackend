@@ -77,12 +77,14 @@
 			<artifactId>jsf-impl</artifactId>
 			<version>2.1.3</version>
 		</dependency>
+
 		<!-- Rest Jax-RS -->
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxrs</artifactId>
 			<version>3.0.10.Final</version>
 		</dependency>
+
 		<!-- CDI implementation -->
 		<dependency>
 			<groupId>org.jboss.weld.servlet</groupId>
@@ -95,6 +97,7 @@
 			<artifactId>cdi-api</artifactId>
 			<version>1.2</version>
 		</dependency>
+
 		<!-- Unit Testing -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -102,6 +105,7 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
+
 		<!-- End-2-End test -->
 		<dependency>
 			<groupId>com.jayway.restassured</groupId>
@@ -109,6 +113,7 @@
 			<version>2.4.0</version>
 			<scope>test</scope>
 		</dependency>
+
 		<!-- Arquillian -->
 		<dependency>
 			<groupId>org.jboss.spec</groupId>
@@ -145,6 +150,14 @@
 			<version>1.6.4</version>
 			<scope>test</scope>
 		</dependency>
+		<!--  Embedded MongoDB for in-memory test purpose -->
+		<dependency>
+			<groupId>de.flapdoodle.embed</groupId>
+			<artifactId>de.flapdoodle.embed.mongo</artifactId>
+			<version>1.46.0</version>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- MongoDB -->
 		<dependency>
 			<groupId>org.mongodb</groupId>
@@ -164,6 +177,7 @@
 			<version>2.3.1</version>
 		</dependency>
 	</dependencies>
+
 	<build>
 		<finalName>gk2restbackend</finalName>
 		<plugins>

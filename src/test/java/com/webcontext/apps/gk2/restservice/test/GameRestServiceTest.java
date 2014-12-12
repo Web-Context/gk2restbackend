@@ -23,10 +23,10 @@ public class GameRestServiceTest {
 	@Test
 	@Ignore
 	public void testFindByTitle() {
-		get("/game/find/Watch%20Dogs")
+		/*get("/game/find/Watch%20Dogs")
 		.then()
 			.statusCode(200)
-			.body("title", equal("Watch Dogs"));
+			.body("title", equal("Watch Dogs"));*/
 	}
 
 	/**

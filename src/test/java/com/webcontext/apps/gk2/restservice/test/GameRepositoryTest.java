@@ -15,9 +15,9 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -34,7 +34,7 @@ import com.webcontext.apps.gk2.restservice.repository.GameRepository;
  */
 @RunWith(Arquillian.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class GameRepositoryTest {
+public class GameRepositoryTest extends MongoDbTest {
 
 	@Deployment
 	public static JavaArchive createArchive() {
@@ -49,11 +49,22 @@ public class GameRepositoryTest {
 	private List<Game> listGames;
 
 	/**
+	 * Start MongoDb Server.
+	 * 
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
+		this.start();
 		listGames = games.loadObjectFromJSONFile("dataset/games.json");
+	}
+
+	/**
+	 * Stop MongoDB Server.
+	 */
+	@After
+	public void tearDown() {
+		this.stop();
 	}
 
 	/**
